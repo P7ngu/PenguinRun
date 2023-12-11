@@ -8,7 +8,7 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var entities = [GKEntity]()
     var graphs = [String : GKGraph]()
@@ -17,12 +17,18 @@ class GameScene: SKScene {
     
     let scoreLabel = SKLabelNode()
     
+    var gameTimer: Timer?
+    
     var player: SKSpriteNode = SKSpriteNode(imageNamed: "player")
     
     var score = 0 {
         didSet{
             scoreLabel.text = "Score: \(score)"
         }
+    }
+    
+    override func didMove(to view: SKView) {
+        gameTimer = Timer.scheduledTimer(timeInterval: 1.8, target: self, selector: #selector(createIceEnemy), userInfo: nil, repeats: true)
     }
     
     override func sceneDidLoad() {
@@ -35,12 +41,23 @@ class GameScene: SKScene {
         addChild(background)
         
         let ground = SKSpriteNode(imageNamed: "ground")
+        ground.name = "Ground"
+       // ground.anchorPoint = .zero
+        ground.position.y = -180
         ground.zPosition = 0
+        ground.physicsBody = SKPhysicsBody(rectangleOf: ground.size)
+        ground.physicsBody!.isDynamic = false
+        ground.physicsBody!.affectedByGravity = false
+        ground.physicsBody!.categoryBitMask = 4
         addChild(ground)
         
         player.position.x = -250
         player.zPosition = 1
         addChild(player)
+        player.physicsBody = SKPhysicsBody(texture: player.texture!, size: player.size)
+        player.physicsBody?.categoryBitMask = 1
+        
+        physicsWorld.contactDelegate = self
         
         if let particles = SKEmitterNode(fileNamed: "SnowParticle"){
             particles.position.x = 0
@@ -48,10 +65,21 @@ class GameScene: SKScene {
             addChild(particles)
         }
         
+        
+        
+        
 
         self.lastUpdateTime = 0
         
       
+    }
+    
+    @objc func createIceEnemy(){
+        let random = GKRandomDistribution(lowestValue: -250, highestValue: 350)
+        let spriteEnemy = SKSpriteNode(imageNamed: "enemy")
+        spriteEnemy.position = CGPoint(x: random.nextInt(), y: 0)
+        spriteEnemy.zPosition = 1
+        addChild(spriteEnemy)
     }
     
     
