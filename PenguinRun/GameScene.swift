@@ -17,7 +17,7 @@ class GameScene: SKScene {
     
     let scoreLabel = SKLabelNode()
     
-    var player: SKSpriteNode = SKSpriteNode(imageNamed: "playericon")
+    var player: SKSpriteNode = SKSpriteNode(imageNamed: "player")
     
     var score = 0 {
         didSet{
@@ -26,6 +26,28 @@ class GameScene: SKScene {
     }
     
     override func sceneDidLoad() {
+        scoreLabel.zPosition = 3
+        scoreLabel.position.y = 130
+        addChild(scoreLabel)
+        
+        let background = SKSpriteNode(imageNamed: "background")
+        background.zPosition = -1
+        addChild(background)
+        
+        let ground = SKSpriteNode(imageNamed: "ground")
+        ground.zPosition = 0
+        addChild(ground)
+        
+        player.position.x = -250
+        player.zPosition = 1
+        addChild(player)
+        
+        if let particles = SKEmitterNode(fileNamed: "SnowParticle"){
+            particles.position.x = 0
+            particles.position.y = 200
+            addChild(particles)
+        }
+        
 
         self.lastUpdateTime = 0
         
