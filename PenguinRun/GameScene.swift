@@ -77,7 +77,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     @objc func createIceEnemy(){
         let random = GKRandomDistribution(lowestValue: -250, highestValue: 350)
         let spriteEnemy = SKSpriteNode(imageNamed: "enemy")
-        spriteEnemy.position = CGPoint(x: random.nextInt(), y: 0)
+        spriteEnemy.position = CGPoint(x: random.nextInt(), y: -80)
         spriteEnemy.zPosition = 1
         addChild(spriteEnemy)
     }
