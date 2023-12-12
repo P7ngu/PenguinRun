@@ -12,9 +12,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let cam = SKCameraNode()
     
     var deltaTime: TimeInterval = 0
-    
-    let ground = SKSpriteNode(imageNamed: "ground")
-    
     var entities = [GKEntity]()
     var graphs = [String : GKGraph]()
     
@@ -34,8 +31,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         gameTimer = Timer.scheduledTimer(timeInterval: 1.8, target: self, selector: #selector(createIceEnemy), userInfo: nil, repeats: true)
-        
-       // setUpBackgrounds()
+      
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
     }
     
@@ -51,7 +47,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         background.zPosition = -1
         addChild(background)
         
-       
+        let ground = SKSpriteNode(imageNamed: "ground")
         ground.name = "Ground"
        // ground.anchorPoint = .zero
         ground.position.y = -200
