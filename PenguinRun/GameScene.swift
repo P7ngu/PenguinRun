@@ -206,6 +206,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         if let particles = SKEmitterNode(fileNamed: "Explosion"){
+            print("explosion")
             particles.position.x = player.position.x
             particles.position.y = player.position.y
             particles.zPosition = 3
