@@ -93,7 +93,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             ground.physicsBody = SKPhysicsBody(rectangleOf: ground.size)
             ground.physicsBody!.isDynamic = false
             ground.physicsBody!.affectedByGravity = false
-            ground.physicsBody!.categoryBitMask = 4
+            ground.physicsBody!.categoryBitMask = 2
             ground.zPosition = -2
             ground.position = CGPoint(x: (ground.size.width / 5 + (ground.size.width * CGFloat(i))), y: -230)
             addChild(ground)
@@ -111,10 +111,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     @objc func createIceEnemy(){
         let random = GKRandomDistribution(lowestValue: -250, highestValue: 350)
         let spriteEnemy = SKSpriteNode(imageNamed: "enemy")
+        spriteEnemy.name = "Enemy"
         spriteEnemy.physicsBody = SKPhysicsBody(texture: spriteEnemy.texture!, size: spriteEnemy.size)
         spriteEnemy.physicsBody?.velocity = CGVector(dx: -500, dy: 0)
         spriteEnemy.physicsBody?.linearDamping = 20
-        spriteEnemy.physicsBody?.contactTestBitMask = 1 //1 indicates the player, only collide with the player
+        spriteEnemy.physicsBody?.contactTestBitMask = 1 | 2 //1 indicates the player, only collide with the player, 2 for the ground
         spriteEnemy.physicsBody?.categoryBitMask = 0 //so we can ignore their collision with one another.
         spriteEnemy.position = CGPoint(x: random.nextInt(), y: 200)
         spriteEnemy.zPosition = 20
@@ -167,7 +168,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.lastUpdateTime = currentTime
         
-        
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -177,14 +177,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if nodeA.name == "Player"{
                 playerHit(nodeB)
                 print("hit")
-            } else {
+            } else if nodeB.name == "Player"{
                 playerHit(nodeA)
                 print("hit")
+            } else if nodeA.name == "Enemy"{
+                cubeHit(nodeA)
+                print("hit cube")
+            } else if nodeB.name == "Enemy"{
+                cubeHit(nodeB)
+                print("hit cube")
             }
         
     }
     
+    func cubeHit(_ node: SKNode){
+        node.removeFromParent()
+    }
+    
     func playerHit(_ node: SKNode){
+        
         if node.name == "bonus"{
             if player.parent != nil{
                 //he's not dead
