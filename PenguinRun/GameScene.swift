@@ -34,42 +34,55 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.view?.ignoresSiblingOrder = false
         groundTimer = Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(createGround), userInfo: nil, repeats: true)
         
-        
         gameTimer = Timer.scheduledTimer(timeInterval: 1.8, target: self, selector: #selector(createIceEnemy), userInfo: nil, repeats: true)
-      
+        
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
     }
     
-
-    
-    override func sceneDidLoad() {
-        self.camera = cam
+    func createScore(){
         scoreLabel.zPosition = 3
         scoreLabel.position.y = 130
+        score = 0
         addChild(scoreLabel)
         
+    }
+    
+    func createBG(){
         let background = SKSpriteNode(imageNamed: "background")
-        background.zPosition = -1
+        background.zPosition = -10
         addChild(background)
-        
-      createGround()
+    }
+    
+    func createPlayer() {
         player.position.x = -250
         player.zPosition = 1
+        player.name = "Player"
         addChild(player)
         player.physicsBody = SKPhysicsBody(rectangleOf: player.size)
         player.physicsBody?.categoryBitMask = 1
-        
-        physicsWorld.contactDelegate = self
-        
+    }
+    
+    func createSnow() {
         if let particles = SKEmitterNode(fileNamed: "SnowParticle"){
             particles.position.x = 0
             particles.position.y = 200
             addChild(particles)
         }
+    }
+    override func sceneDidLoad() {
+        self.camera = cam
+        createScore()
+        createBG()
+        createGround()
+        createPlayer()
+        createSnow()
+        
+        physicsWorld.contactDelegate = self
+        
         
         self.lastUpdateTime = 0
         
-      
+        
     }
     
     @objc func createGround() {
@@ -81,7 +94,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             ground.physicsBody!.isDynamic = false
             ground.physicsBody!.affectedByGravity = false
             ground.physicsBody!.categoryBitMask = 4
-            ground.zPosition = -1
+            ground.zPosition = -2
             ground.position = CGPoint(x: (ground.size.width / 5 + (ground.size.width * CGFloat(i))), y: -230)
             addChild(ground)
             
@@ -104,7 +117,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         spriteEnemy.physicsBody?.contactTestBitMask = 1 //1 indicates the player, only collide with the player
         spriteEnemy.physicsBody?.categoryBitMask = 0 //so we can ignore their collision with one another.
         spriteEnemy.position = CGPoint(x: random.nextInt(), y: 200)
-        spriteEnemy.zPosition = 1
+        spriteEnemy.zPosition = 20
         addChild(spriteEnemy)
     }
     
@@ -123,7 +136,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-       
+        
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -131,7 +144,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func touchUp(atPoint pos: CGPoint) {
-       // player?.texture = SKTexture(imageNamed: "player_standing")
+        // player?.texture = SKTexture(imageNamed: "player_standing")
     }
     
     
@@ -154,7 +167,54 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.lastUpdateTime = currentTime
         
-       
+        
     }
-
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        
+            guard let nodeA = contact.bodyA.node else { return }
+            guard let nodeB = contact.bodyB.node else { return }
+            if nodeA.name == "Player"{
+                playerHit(nodeB)
+                print("hit")
+            } else {
+                playerHit(nodeA)
+                print("hit")
+            }
+        
+    }
+    
+    func playerHit(_ node: SKNode){
+        if node.name == "bonus"{
+            if player.parent != nil{
+                //he's not dead
+                score += 5
+            }
+            node.removeFromParent()
+            return
+        }
+        
+        if let particles = SKEmitterNode(fileNamed: "Explosion"){
+            particles.position.x = player.position.x
+            particles.position.y = player.position.y
+            particles.zPosition = 3
+            addChild(particles)
+        }
+        player.removeFromParent()
+        
+        let gameOver = SKSpriteNode(imageNamed: "gameover")
+        gameOver.zPosition = 10
+        addChild(gameOver)
+        
+        //let's wait 2 seconds and then run some new code
+        DispatchQueue.main.asyncAfter(deadline: .now()+2){
+            //new scene incoming
+            if let scene = GameScene(fileNamed: "GameScene"){
+                scene.scaleMode = .aspectFill
+                //let's present it immediately
+                self.view?.presentScene(scene)
+            }
+        }
+    }
+    
 }
