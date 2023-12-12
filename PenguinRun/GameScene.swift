@@ -9,6 +9,11 @@ import SpriteKit
 import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
+    let cam = SKCameraNode()
+    
+    var deltaTime: TimeInterval = 0
+    
+    let ground = SKSpriteNode(imageNamed: "ground")
     
     var entities = [GKEntity]()
     var graphs = [String : GKGraph]()
@@ -29,9 +34,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         gameTimer = Timer.scheduledTimer(timeInterval: 1.8, target: self, selector: #selector(createIceEnemy), userInfo: nil, repeats: true)
+        
+       // setUpBackgrounds()
+        self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
     }
     
+
+    
     override func sceneDidLoad() {
+        self.camera = cam
         scoreLabel.zPosition = 3
         scoreLabel.position.y = 130
         addChild(scoreLabel)
@@ -40,10 +51,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         background.zPosition = -1
         addChild(background)
         
-        let ground = SKSpriteNode(imageNamed: "ground")
+       
         ground.name = "Ground"
        // ground.anchorPoint = .zero
-        ground.position.y = -180
+        ground.position.y = -200
         ground.zPosition = 0
         ground.physicsBody = SKPhysicsBody(rectangleOf: ground.size)
         ground.physicsBody!.isDynamic = false
@@ -54,7 +65,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.position.x = -250
         player.zPosition = 1
         addChild(player)
-        player.physicsBody = SKPhysicsBody(texture: player.texture!, size: player.size)
+        player.physicsBody = SKPhysicsBody(rectangleOf: player.size)
         player.physicsBody?.categoryBitMask = 1
         
         physicsWorld.contactDelegate = self
@@ -65,10 +76,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             addChild(particles)
         }
         
-        
-        
-        
-
         self.lastUpdateTime = 0
         
       
@@ -84,7 +91,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-      
+        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
+    }
+    
+    func touchDown(atPoint pos: CGPoint) {
+        jump()
+    }
+    
+    func jump() {
+        //player.texture = SKTexture(imageNamed: "player_jumping")
+        player.physicsBody?.applyImpulse(CGVector(dx: 50, dy: 420))
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -92,13 +108,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-       
+        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
     
+    func touchUp(atPoint pos: CGPoint) {
+       // player?.texture = SKTexture(imageNamed: "player_standing")
+    }
     
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+        cam.position = player.position
         
         // Initialize _lastUpdateTime if it has not already been
         if (self.lastUpdateTime == 0) {
@@ -114,5 +134,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         self.lastUpdateTime = currentTime
+        
+       
     }
+
 }
