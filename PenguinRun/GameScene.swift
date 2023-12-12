@@ -20,6 +20,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let scoreLabel = SKLabelNode()
     
     var gameTimer: Timer?
+    var groundTimer: Timer?
     
     var player: SKSpriteNode = SKSpriteNode(imageNamed: "player")
     
@@ -30,6 +31,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func didMove(to view: SKView) {
+        self.view?.ignoresSiblingOrder = false
+        groundTimer = Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(createGround), userInfo: nil, repeats: true)
+        
+        
         gameTimer = Timer.scheduledTimer(timeInterval: 1.8, target: self, selector: #selector(createIceEnemy), userInfo: nil, repeats: true)
       
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
@@ -47,17 +52,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         background.zPosition = -1
         addChild(background)
         
-        let ground = SKSpriteNode(imageNamed: "ground")
-        ground.name = "Ground"
-       // ground.anchorPoint = .zero
-        ground.position.y = -200
-        ground.zPosition = 0
-        ground.physicsBody = SKPhysicsBody(rectangleOf: ground.size)
-        ground.physicsBody!.isDynamic = false
-        ground.physicsBody!.affectedByGravity = false
-        ground.physicsBody!.categoryBitMask = 4
-        addChild(ground)
-        
+      createGround()
         player.position.x = -250
         player.zPosition = 1
         addChild(player)
@@ -77,10 +72,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       
     }
     
+    @objc func createGround() {
+        
+        for i in 0 ... 3 {
+            let ground = SKSpriteNode(imageNamed: "ground")
+            ground.name = "Ground"
+            ground.physicsBody = SKPhysicsBody(rectangleOf: ground.size)
+            ground.physicsBody!.isDynamic = false
+            ground.physicsBody!.affectedByGravity = false
+            ground.physicsBody!.categoryBitMask = 4
+            ground.zPosition = -1
+            ground.position = CGPoint(x: (ground.size.width / 5 + (ground.size.width * CGFloat(i))), y: -230)
+            addChild(ground)
+            
+            let moveLeft = SKAction.moveBy(x: -ground.size.width - 500, y: 0, duration: 5)
+            let moveReset = SKAction.moveBy(x: ground.size.width, y: 0, duration: 0)
+            let moveLoop = SKAction.sequence([moveLeft, moveReset])
+            let moveForever = SKAction.repeatForever(moveLoop)
+            
+            ground.run(moveForever)
+        }
+        
+    }
+    
     @objc func createIceEnemy(){
         let random = GKRandomDistribution(lowestValue: -250, highestValue: 350)
         let spriteEnemy = SKSpriteNode(imageNamed: "enemy")
-        spriteEnemy.position = CGPoint(x: random.nextInt(), y: -80)
+        spriteEnemy.physicsBody = SKPhysicsBody(texture: spriteEnemy.texture!, size: spriteEnemy.size)
+        spriteEnemy.physicsBody?.velocity = CGVector(dx: -500, dy: 0)
+        spriteEnemy.physicsBody?.linearDamping = 20
+        spriteEnemy.physicsBody?.contactTestBitMask = 1 //1 indicates the player, only collide with the player
+        spriteEnemy.physicsBody?.categoryBitMask = 0 //so we can ignore their collision with one another.
+        spriteEnemy.position = CGPoint(x: random.nextInt(), y: 200)
         spriteEnemy.zPosition = 1
         addChild(spriteEnemy)
     }
@@ -96,7 +119,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func jump() {
         //player.texture = SKTexture(imageNamed: "player_jumping")
-        player.physicsBody?.applyImpulse(CGVector(dx: 50, dy: 420))
+        player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 420))
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
