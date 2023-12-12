@@ -32,7 +32,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         self.view?.ignoresSiblingOrder = false
-        groundTimer = Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(createGround), userInfo: nil, repeats: true)
+        groundTimer = Timer.scheduledTimer(timeInterval: 40, target: self, selector: #selector(createGround), userInfo: nil, repeats: true)
         
         gameTimer = Timer.scheduledTimer(timeInterval: 1.8, target: self, selector: #selector(createIceEnemy), userInfo: nil, repeats: true)
         
@@ -98,7 +98,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             ground.position = CGPoint(x: (ground.size.width / 5 + (ground.size.width * CGFloat(i))), y: -230)
             addChild(ground)
             
-            let moveLeft = SKAction.moveBy(x: -ground.size.width - 500, y: 0, duration: 5)
+            let moveLeft = SKAction.moveBy(x: -ground.size.width - 500, y: 0, duration: 15)
             let moveReset = SKAction.moveBy(x: ground.size.width, y: 0, duration: 0)
             let moveLoop = SKAction.sequence([moveLeft, moveReset])
             let moveForever = SKAction.repeatForever(moveLoop)
@@ -132,7 +132,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func jump() {
         //player.texture = SKTexture(imageNamed: "player_jumping")
-        player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 420))
+        player.physicsBody?.applyImpulse(CGVector(dx: 50, dy: 420))
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -203,11 +203,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.removeFromParent()
         
         let gameOver = SKSpriteNode(imageNamed: "gameover")
+        gameOver.position = CGPoint(x: 0.0, y: 0.0)
         gameOver.zPosition = 10
         addChild(gameOver)
         
-        //let's wait 2 seconds and then run some new code
-        DispatchQueue.main.asyncAfter(deadline: .now()+2){
+        
+        DispatchQueue.main.asyncAfter(deadline: .now()+5){
             //new scene incoming
             if let scene = GameScene(fileNamed: "GameScene"){
                 scene.scaleMode = .aspectFill
