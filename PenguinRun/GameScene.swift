@@ -72,9 +72,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func restartSceneWithDelay(){
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5){
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2){
             //new scene incoming
-            
             if let scene = GameScene(fileNamed: "GameScene"){
                 scene.scaleMode = .aspectFill
                 //let's present it immediately
