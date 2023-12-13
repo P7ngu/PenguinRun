@@ -18,9 +18,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var lastUpdateTime : TimeInterval = 0
     
     let scoreLabel = SKLabelNode()
+    var playButton = SKSpriteNode()
+    var playButtonIsActive = true
     
     var gameTimer: Timer?
     var groundTimer: Timer?
+    var groundDeleteTimer: Timer?
+    var gameOver = false
+    var touchedPlayButton = false {
+        didSet{
+            //start the game
+            if touchedPlayButton { //the user is starting the game
+                playButton.zPosition = -100
+                playButtonIsActive = false
+                gameTimer = Timer.scheduledTimer(timeInterval: 1.8, target: self, selector: #selector(createIceEnemy), userInfo: nil, repeats: true)
+            } else { //I'm resetting it lol
+                
+               
+            }
+        }
+    }
     
     var player: SKSpriteNode = SKSpriteNode(imageNamed: "player")
     
@@ -30,11 +47,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    
     override func didMove(to view: SKView) {
         self.view?.ignoresSiblingOrder = false
         groundTimer = Timer.scheduledTimer(timeInterval: 40, target: self, selector: #selector(createGround), userInfo: nil, repeats: true)
         
-        gameTimer = Timer.scheduledTimer(timeInterval: 1.8, target: self, selector: #selector(createIceEnemy), userInfo: nil, repeats: true)
+        groundDeleteTimer = Timer.scheduledTimer(timeInterval: 1.8, target: self, selector: #selector(deleteUnusedGrounds), userInfo: nil, repeats: true)
         
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
     }
@@ -69,7 +87,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             addChild(particles)
         }
     }
+    
+    func createMenu(){
+        if gameOver{
+            //restart menu
+        } else {
+            //first time menu
+            playButton = SKSpriteNode(imageNamed: "play")
+            playButton.zPosition = 70
+            playButton.position = CGPoint(x: frame.midX - 250, y: frame.midY - 150)
+            self.addChild(playButton)
+        }
+        
+    }
+    
     override func sceneDidLoad() {
+        createMenu()
         self.camera = cam
         createScore()
         createBG()
@@ -84,9 +117,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
     }
+    @objc func deleteUnusedGrounds(){
+        for node in children {
+            if node.position.x < -3000 {
+                node.removeFromParent()
+            }
+        }
+    }
     
     @objc func createGround() {
-        
         for i in 0 ... 3 {
             let ground = SKSpriteNode(imageNamed: "ground")
             ground.name = "Ground"
@@ -125,6 +164,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: self)
+        let tappedNodes = nodes(at: location)
+        
+        if tappedNodes.contains(playButton){
+            //I'm touching the play button, but is it active?
+            if(playButtonIsActive){
+                touchedPlayButton.toggle()
+            }
+        }
     }
     
     func touchDown(atPoint pos: CGPoint) {
@@ -133,7 +182,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func jump() {
         //player.texture = SKTexture(imageNamed: "player_jumping")
-        player.physicsBody?.applyImpulse(CGVector(dx: 50, dy: 420))
+        player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 420))
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -222,13 +271,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.removeFromParent()
         
         let gameOver = SKSpriteNode(imageNamed: "gameover")
-        gameOver.position = CGPoint(x: 0.0, y: 0.0)
+        gameOver.position = CGPoint(x: -230, y: -100)
         gameOver.zPosition = 10
         addChild(gameOver)
         
         
-        DispatchQueue.main.asyncAfter(deadline: .now()+5){
+        DispatchQueue.main.asyncAfter(deadline: .now()+3){
             //new scene incoming
+           
             if let scene = GameScene(fileNamed: "GameScene"){
                 scene.scaleMode = .aspectFill
                 //let's present it immediately
