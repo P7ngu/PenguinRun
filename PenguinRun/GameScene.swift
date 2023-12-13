@@ -191,6 +191,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func cubeHit(_ node: SKNode){
+        if let particles = SKEmitterNode(fileNamed: "Explosion"){
+            print("explosion cube")
+            particles.position.x = node.position.x
+            particles.position.y = node.position.y
+            particles.zPosition = 3
+            addChild(particles)
+        }
         node.removeFromParent()
     }
     
