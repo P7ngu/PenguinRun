@@ -92,9 +92,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
     }
     
+    func updateScoreLabelPosition(){
+        scoreLabel.position.y = (camera?.position.y)! + 120
+        scoreLabel.position.x = (camera?.position.x)! + 250
+    }
+    
     func createScore(){
         scoreLabel.zPosition = 3
-        scoreLabel.position.y = 130
+        scoreLabel.fontColor = .black
+        updateScoreLabelPosition()
         score = 0
         addChild(scoreLabel)
         
@@ -129,7 +135,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func updateExitButtonPosition(){
-        exitButton.position = CGPoint(x: (camera?.position.x)! - 300, y: (camera?.position.y)! + 140)
+        exitButton.position = CGPoint(x: (camera?.position.x)! - 330, y: (camera?.position.y)! + 130)
     }
     
     func createExitButton(){
@@ -274,6 +280,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Called before each frame is rendered
         cam.position = player.position
         updateExitButtonPosition()
+        updateScoreLabelPosition()
         
         // Initialize _lastUpdateTime if it has not already been
         if (self.lastUpdateTime == 0) {
