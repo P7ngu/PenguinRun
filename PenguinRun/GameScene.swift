@@ -115,10 +115,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func updateExitButtonPosition(){
+        exitButton.position = CGPoint(x: (camera?.position.x)! - 300, y: (camera?.position.y)! + 140)
+    }
+    
     func createExitButton(){
         exitButton = SKSpriteNode(imageNamed: "exit")
         exitButton.zPosition = 100
-        exitButton.position = CGPoint(x: (camera?.position.x)! - 300, y: (camera?.position.y)! + 140)
+        updateExitButtonPosition()
         addChild(exitButton)
     }
     
@@ -255,7 +259,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
         cam.position = player.position
-        exitButton.position = CGPoint(x: (camera?.position.x)! - 300, y: (camera?.position.y)! + 130)
+        updateExitButtonPosition()
         
         // Initialize _lastUpdateTime if it has not already been
         if (self.lastUpdateTime == 0) {
