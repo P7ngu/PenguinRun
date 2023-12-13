@@ -150,8 +150,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     @objc func createIceEnemy(){
         let randomX = GKRandomDistribution(lowestValue: 0, highestValue: 20)
-        let randomY = GKRandomDistribution(lowestValue: 0, highestValue: -100)
-        
+        let randomY = GKRandomDistribution(lowestValue: -40, highestValue: -100)
+       
         let spriteEnemy = SKSpriteNode(imageNamed: "enemy")
         spriteEnemy.name = "Enemy"
         spriteEnemy.physicsBody = SKPhysicsBody(texture: spriteEnemy.texture!, size: spriteEnemy.size)
