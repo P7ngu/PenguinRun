@@ -31,7 +31,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if touchedPlayButton { //the user is starting the game
                 playButton.zPosition = -100
                 playButtonIsActive = false
-                gameTimer = Timer.scheduledTimer(timeInterval: 1.8, target: self, selector: #selector(createIceEnemy), userInfo: nil, repeats: true)
+                gameTimer = Timer.scheduledTimer(timeInterval: 4.2, target: self, selector: #selector(createIceEnemy), userInfo: nil, repeats: true)
             } else { //I'm resetting it lol
                 
                
@@ -73,6 +73,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func createPlayer() {
         player.position.x = -250
+        //player.position.y = -200
         player.zPosition = 1
         player.name = "Player"
         addChild(player)
@@ -148,17 +149,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     @objc func createIceEnemy(){
-        let random = GKRandomDistribution(lowestValue: -250, highestValue: 350)
+        let randomX = GKRandomDistribution(lowestValue: 0, highestValue: 20)
+        let randomY = GKRandomDistribution(lowestValue: 0, highestValue: -100)
+        
         let spriteEnemy = SKSpriteNode(imageNamed: "enemy")
         spriteEnemy.name = "Enemy"
         spriteEnemy.physicsBody = SKPhysicsBody(texture: spriteEnemy.texture!, size: spriteEnemy.size)
         spriteEnemy.physicsBody?.velocity = CGVector(dx: -500, dy: 0)
         spriteEnemy.physicsBody?.linearDamping = 20
+        spriteEnemy.physicsBody?.affectedByGravity = false
         spriteEnemy.physicsBody?.contactTestBitMask = 1 | 2 //1 indicates the player, only collide with the player, 2 for the ground
         spriteEnemy.physicsBody?.categoryBitMask = 0 //so we can ignore their collision with one another.
-        spriteEnemy.position = CGPoint(x: random.nextInt(), y: 200)
+        spriteEnemy.position = CGPoint(x: randomX.nextInt(), y: randomY.nextInt())
         spriteEnemy.zPosition = 20
         addChild(spriteEnemy)
+        let moveTheEnemy = SKAction.moveBy(x: -1250, y: 0, duration: 7)
+        let moveLoop = SKAction.sequence([moveTheEnemy])
+        let moveForever = SKAction.repeatForever(moveLoop)
+        spriteEnemy.run(moveForever)
     }
     
     
@@ -247,9 +255,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             particles.position.x = node.position.x
             particles.position.y = node.position.y
             particles.zPosition = 3
-            addChild(particles)
+           // addChild(particles)
         }
-        node.removeFromParent()
+        //node.removeFromParent()
     }
     
     func playerHit(_ node: SKNode){
