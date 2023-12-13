@@ -68,6 +68,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func createBG(){
         let background = SKSpriteNode(imageNamed: "background")
         background.zPosition = -10
+        //background.position.y = -200
         addChild(background)
     }
     
@@ -137,8 +138,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             ground.physicsBody!.isDynamic = false
             ground.physicsBody!.affectedByGravity = false
             ground.physicsBody!.categoryBitMask = 2
-            ground.zPosition = -2
-            ground.position = CGPoint(x: (ground.size.width / 5 + (ground.size.width * CGFloat(i))), y: -240)
+            ground.zPosition = -9
+            ground.position = CGPoint(x: (ground.size.width / 5 + (ground.size.width * CGFloat(i))), y: -270)
             addChild(ground)
             
             let moveLeft = SKAction.moveBy(x: -ground.size.width - 500, y: 0, duration: 15)
