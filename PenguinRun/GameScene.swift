@@ -209,9 +209,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     @objc func createIceEnemy(){
+        incrementPlayerScore(points: 1)
         let randomX = GKRandomDistribution(lowestValue: 100, highestValue: 200)
-        //let randomY = GKRandomDistribution(lowestValue: -100, highestValue: -120)
-       
         let spriteEnemy = SKSpriteNode(imageNamed: "enemy")
         spriteEnemy.name = "Enemy"
         let icecubeSize = CGSize(width: spriteEnemy.size.width - 60, height: spriteEnemy.size.height - 40)
@@ -330,12 +329,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //node.removeFromParent()
     }
     
+    func incrementPlayerScore(points: Int){
+        if player.parent != nil{
+            //he's not dead
+            score += points
+        }
+    }
+    
     func playerHit(_ node: SKNode){
         if node.name == "Bonus"{
-            if player.parent != nil{
-                //he's not dead
-                score += 5
-            }
+           incrementPlayerScore(points: 5)
             node.removeFromParent()
             return
         }
