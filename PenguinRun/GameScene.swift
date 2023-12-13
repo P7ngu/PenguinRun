@@ -70,6 +70,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
+    
+    func restartSceneWithDelay(){
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5){
+            //new scene incoming
+            
+            if let scene = GameScene(fileNamed: "GameScene"){
+                scene.scaleMode = .aspectFill
+                //let's present it immediately
+                self.view?.presentScene(scene)
+            }
+        }
+    }
+
     override func didMove(to view: SKView) {
         self.view?.ignoresSiblingOrder = false
         groundTimer = Timer.scheduledTimer(timeInterval: 40, target: self, selector: #selector(createGround), userInfo: nil, repeats: true)
@@ -155,6 +168,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
     }
+    
     @objc func deleteUnusedGrounds(){
         for node in children {
             if node.position.x < -3000 {
@@ -237,7 +251,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func jump() {
-        if player.position.y < -10 {
+        if player.position.y < -50 {
             //player.texture = SKTexture(imageNamed: "player_jumping")
             player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 380))
         }
@@ -310,8 +324,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func playerHit(_ node: SKNode){
-        
-        if node.name == "bonus"{
+        if node.name == "Bonus"{
             if player.parent != nil{
                 //he's not dead
                 score += 5
@@ -333,17 +346,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameOver.position = CGPoint(x: -230, y: -100)
         gameOver.zPosition = 10
         addChild(gameOver)
-        
-        
-        DispatchQueue.main.asyncAfter(deadline: .now()+3){
-            //new scene incoming
-           
-            if let scene = GameScene(fileNamed: "GameScene"){
-                scene.scaleMode = .aspectFill
-                //let's present it immediately
-                self.view?.presentScene(scene)
-            }
-        }
+        restartSceneWithDelay()
     }
     
 }
