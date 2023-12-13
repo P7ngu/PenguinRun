@@ -95,7 +95,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             //first time menu
             playButton = SKSpriteNode(imageNamed: "play")
             playButton.zPosition = 70
-            playButton.position = CGPoint(x: frame.midX - 250, y: frame.midY - 150)
+            playButton.position = CGPoint(x: frame.midX - 250, y: frame.midY - 180)
             self.addChild(playButton)
         }
         
@@ -134,7 +134,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             ground.physicsBody!.affectedByGravity = false
             ground.physicsBody!.categoryBitMask = 2
             ground.zPosition = -2
-            ground.position = CGPoint(x: (ground.size.width / 5 + (ground.size.width * CGFloat(i))), y: -230)
+            ground.position = CGPoint(x: (ground.size.width / 5 + (ground.size.width * CGFloat(i))), y: -240)
             addChild(ground)
             
             let moveLeft = SKAction.moveBy(x: -ground.size.width - 500, y: 0, duration: 15)
@@ -181,8 +181,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func jump() {
-        //player.texture = SKTexture(imageNamed: "player_jumping")
-        player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 420))
+        if player.position.y < -30 {
+            //player.texture = SKTexture(imageNamed: "player_jumping")
+            player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 420))
+        }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
