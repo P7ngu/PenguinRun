@@ -130,7 +130,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for i in 0 ... 3 {
             let ground = SKSpriteNode(imageNamed: "ground")
             ground.name = "Ground"
-            ground.physicsBody = SKPhysicsBody(rectangleOf: ground.size)
+            let rectWidth = ground.size.width
+            let rectHeight = ground.size.height - 65
+            let rectangle = CGSize(width: rectWidth, height: rectHeight)
+            ground.physicsBody = SKPhysicsBody(rectangleOf: rectangle)
             ground.physicsBody!.isDynamic = false
             ground.physicsBody!.affectedByGravity = false
             ground.physicsBody!.categoryBitMask = 2
@@ -149,8 +152,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     @objc func createIceEnemy(){
-        let randomX = GKRandomDistribution(lowestValue: 0, highestValue: 20)
-        let randomY = GKRandomDistribution(lowestValue: -40, highestValue: -100)
+        let randomX = GKRandomDistribution(lowestValue: 100, highestValue: 200)
+        //let randomY = GKRandomDistribution(lowestValue: -100, highestValue: -120)
        
         let spriteEnemy = SKSpriteNode(imageNamed: "enemy")
         spriteEnemy.name = "Enemy"
@@ -158,12 +161,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         spriteEnemy.physicsBody?.velocity = CGVector(dx: -500, dy: 0)
         spriteEnemy.physicsBody?.linearDamping = 20
         spriteEnemy.physicsBody?.affectedByGravity = false
-        spriteEnemy.physicsBody?.contactTestBitMask = 1 | 2 //1 indicates the player, only collide with the player, 2 for the ground
+        spriteEnemy.physicsBody?.contactTestBitMask = 1 
+        //| 2 //1 indicates the player, only collide with the player, 2 for the ground
         spriteEnemy.physicsBody?.categoryBitMask = 0 //so we can ignore their collision with one another.
-        spriteEnemy.position = CGPoint(x: randomX.nextInt(), y: randomY.nextInt())
+        spriteEnemy.position = CGPoint(x: randomX.nextInt(), y: -190)
         spriteEnemy.zPosition = 20
         addChild(spriteEnemy)
-        let moveTheEnemy = SKAction.moveBy(x: -1250, y: 0, duration: 7)
+        let moveTheEnemy = SKAction.moveBy(x: -300, y: 0, duration: 7)
         let moveLoop = SKAction.sequence([moveTheEnemy])
         let moveForever = SKAction.repeatForever(moveLoop)
         spriteEnemy.run(moveForever)
@@ -189,7 +193,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func jump() {
-        if player.position.y < -30 {
+        if player.position.y < -40 {
             //player.texture = SKTexture(imageNamed: "player_jumping")
             player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 420))
         }
@@ -240,10 +244,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 playerHit(nodeA)
                 print("hit")
             } else if nodeA.name == "Enemy"{
-                cubeHit(nodeA)
+                //cubeHit(nodeA)
                 print("hit cube")
             } else if nodeB.name == "Enemy"{
-                cubeHit(nodeB)
+                //cubeHit(nodeB)
                 print("hit cube")
             }
         
