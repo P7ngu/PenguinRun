@@ -19,22 +19,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     let scoreLabel = SKLabelNode()
     var playButton = SKSpriteNode()
+    var exitButton = SKSpriteNode()
     var playButtonIsActive = true
+    var exitButtonIsActive = true
     
     var gameTimer: Timer?
     var groundTimer: Timer?
     var groundDeleteTimer: Timer?
     var gameOver = false
+    
+    var touchedExitButton = false {
+        didSet{
+            if(exitButtonIsActive){
+                restartScene()
+            }
+        }
+    }
     var touchedPlayButton = false {
         didSet{
             //start the game
             if touchedPlayButton { //the user is starting the game
                 playButton.zPosition = -100
                 playButtonIsActive = false
+                createExitButton()
+                exitButtonIsActive = true
                 gameTimer = Timer.scheduledTimer(timeInterval: 4.2, target: self, selector: #selector(createIceEnemy), userInfo: nil, repeats: true)
             } else { //I'm resetting it lol
                 
-               
+               exitButtonIsActive = false
             }
         }
     }
@@ -47,7 +59,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    
+    func restartScene(){
+        DispatchQueue.main.asyncAfter(deadline: .now()){
+            //new scene incoming
+            
+            if let scene = GameScene(fileNamed: "GameScene"){
+                scene.scaleMode = .aspectFill
+                //let's present it immediately
+                self.view?.presentScene(scene)
+            }
+        }
+    }
     override func didMove(to view: SKView) {
         self.view?.ignoresSiblingOrder = false
         groundTimer = Timer.scheduledTimer(timeInterval: 40, target: self, selector: #selector(createGround), userInfo: nil, repeats: true)
@@ -64,6 +86,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(scoreLabel)
         
     }
+    
+   
     
     func createBG(){
         let background = SKSpriteNode(imageNamed: "background")
@@ -89,6 +113,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             particles.position.y = 200
             addChild(particles)
         }
+    }
+    
+    func createExitButton(){
+        exitButton = SKSpriteNode(imageNamed: "exit")
+        exitButton.zPosition = 100
+        exitButton.position = CGPoint(x: frame.midX - 590, y: frame.midY - 10)
+        addChild(exitButton)
     }
     
     func createMenu(){
@@ -189,6 +220,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 touchedPlayButton.toggle()
             }
         }
+        if tappedNodes.contains(exitButton){
+            if(exitButtonIsActive){
+                print("exit started")
+                restartScene()
+            }
+        }
     }
     
     func touchDown(atPoint pos: CGPoint) {
@@ -196,9 +233,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func jump() {
-        if player.position.y < -40 {
+        if player.position.y < -10 {
             //player.texture = SKTexture(imageNamed: "player_jumping")
-            player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 420))
+            player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 380))
         }
     }
     
