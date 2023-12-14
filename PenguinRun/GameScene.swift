@@ -76,7 +76,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func updateBestScore() {
-        print("updating score...")
         bestScoreLabel.position.y = (camera?.position.y)! + 120
         bestScoreLabel.position.x = (camera?.position.x)! - 200
         bestScoreLabel.text = "Best score: \(bestScore)"
@@ -303,9 +302,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func jump() {
-        if player.position.y < -50 {
+        if player.position.y < -40 {
             //player.texture = SKTexture(imageNamed: "player_jumping")
-            player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 380))
+            player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 300))
         }
     }
     
