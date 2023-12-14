@@ -95,7 +95,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func restartSceneWithDelay(){
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2){
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.3){
             //new scene incoming
             if let scene = GameScene(fileNamed: "GameScene"){
                 scene.scaleMode = .aspectFill
@@ -181,6 +181,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func sceneDidLoad() {
+        let music = SKAudioNode(fileNamed: "wind.mp3")
+        addChild(music)
         createMenu()
         self.camera = cam
         createScore()
@@ -303,6 +305,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func jump() {
         if player.position.y < -40 {
+            let sound = SKAction.playSoundFileNamed("jump.wav", waitForCompletion: false)
+            run(sound)
             //player.texture = SKTexture(imageNamed: "player_jumping")
             player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 300))
         }
@@ -385,10 +389,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func playerHit(_ node: SKNode){
         if node.name == "Bonus"{
+            let sound = SKAction.playSoundFileNamed("bonus.wav", waitForCompletion: false)
+            run(sound)
            incrementPlayerScore(points: 5)
             node.removeFromParent()
             return
         }
+        let sound = SKAction.playSoundFileNamed("explosion.wav", waitForCompletion: false)
+        run(sound)
         
         if let particles = SKEmitterNode(fileNamed: "Explosion"){
             print("explosion")
@@ -407,6 +415,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameOver.zPosition = 10
         gameOver.position = CGPoint(x: -230, y: -100)
         gameOver.alpha = 0
+        let sound = SKAction.playSoundFileNamed("icebreak", waitForCompletion: false)
+        run(sound)
         addChild(gameOver)
         
         let waitAction = SKAction.wait(forDuration: 0.2)
