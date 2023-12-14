@@ -7,8 +7,15 @@
 
 import SpriteKit
 import GameplayKit
+import SwiftUI
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
+    @AppStorage("bestscore", store: UserDefaults(suiteName: "group.matteo.perotta.penguin-run")) var bestScore = 0 {
+        didSet{
+            updateBestScore()
+        }
+    }
+    
     let cam = SKCameraNode()
     
     var deltaTime: TimeInterval = 0
@@ -18,6 +25,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var lastUpdateTime : TimeInterval = 0
     
     let scoreLabel = SKLabelNode()
+    let bestScoreLabel = SKLabelNode()
     var playButton = SKSpriteNode()
     var exitButton = SKSpriteNode()
     var playButtonIsActive = true
@@ -57,6 +65,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         didSet{
             scoreLabel.text = "Score: \(score)"
         }
+    }
+    
+    func createBestScoreLabel(){
+        bestScoreLabel.text = "Best score: \(bestScore)"
+        bestScoreLabel.zPosition = 5
+        bestScoreLabel.fontColor = .black
+        updateBestScore()
+        addChild(bestScoreLabel)
+    }
+    
+    func updateBestScore() {
+        print("updating score...")
+        bestScoreLabel.position.y = (camera?.position.y)! + 120
+        bestScoreLabel.position.x = (camera?.position.x)! - 200
+        bestScoreLabel.text = "Best score: \(bestScore)"
+        
     }
     
     func restartScene(){
@@ -165,6 +189,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createGround()
         createPlayer()
         createSnow()
+        createBestScoreLabel()
         
         physicsWorld.contactDelegate = self
         
@@ -302,6 +327,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         cam.position = player.position
         updateExitButtonPosition()
         updateScoreLabelPosition()
+        updateBestScore()
         
         // Initialize _lastUpdateTime if it has not already been
         if (self.lastUpdateTime == 0) {
@@ -373,11 +399,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             addChild(particles)
         }
         player.removeFromParent()
-        
+        makeTheGameEnd()
+     
+    }
+    
+    func makeTheGameEnd () {
         let gameOver = SKSpriteNode(imageNamed: "gameover")
         gameOver.position = CGPoint(x: -230, y: -100)
         gameOver.zPosition = 10
         addChild(gameOver)
+        if(score > bestScore){
+            print("new best score")
+            bestScore = score
+        }
         restartSceneWithDelay()
     }
     
