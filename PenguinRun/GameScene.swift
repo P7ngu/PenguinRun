@@ -404,9 +404,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func makeTheGameEnd () {
         let gameOver = SKSpriteNode(imageNamed: "gameover")
-        gameOver.position = CGPoint(x: -230, y: -100)
         gameOver.zPosition = 10
+        gameOver.position = CGPoint(x: -230, y: -100)
+        gameOver.alpha = 0
         addChild(gameOver)
+        
+        let waitAction = SKAction.wait(forDuration: 0.2)
+        let fadeInAction = SKAction.fadeIn(withDuration: 0.75)
+        let sequenceAction = SKAction.sequence([waitAction, fadeInAction])
+        
+        gameOver.run(sequenceAction)
+        
+        
         if(score > bestScore){
             print("new best score")
             bestScore = score
