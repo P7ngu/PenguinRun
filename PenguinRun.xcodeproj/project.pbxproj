@@ -19,11 +19,7 @@
 		63693B992B2844CD0056E7FA /* TestingStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63693B982B2844CD0056E7FA /* TestingStuff.swift */; };
 		63693B9E2B287C510056E7FA /* Explosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = 63693B9C2B287C510056E7FA /* Explosion.sks */; };
 		63693B9F2B287C510056E7FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63693B9D2B287C510056E7FA /* Assets.xcassets */; };
-		636DCBE12B2AFC2A0037CF26 /* bonus.wav in Resources */ = {isa = PBXBuildFile; fileRef = 636DCBE02B2AFC2A0037CF26 /* bonus.wav */; };
 		636DCBE32B2AFE6A0037CF26 /* explosion.wav in Resources */ = {isa = PBXBuildFile; fileRef = 636DCBE22B2AFE6A0037CF26 /* explosion.wav */; };
-		636DCBE52B2AFEDB0037CF26 /* jump.wav in Resources */ = {isa = PBXBuildFile; fileRef = 636DCBE42B2AFEDB0037CF26 /* jump.wav */; };
-		636DCBE72B2B00910037CF26 /* wind.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 636DCBE62B2B00910037CF26 /* wind.mp3 */; };
-		636DCBE92B2B09890037CF26 /* icebreak.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 636DCBE82B2B09890037CF26 /* icebreak.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,11 +36,7 @@
 		63693B982B2844CD0056E7FA /* TestingStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingStuff.swift; sourceTree = "<group>"; };
 		63693B9C2B287C510056E7FA /* Explosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Explosion.sks; sourceTree = "<group>"; };
 		63693B9D2B287C510056E7FA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		636DCBE02B2AFC2A0037CF26 /* bonus.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = bonus.wav; path = ../../../../Downloads/bonus.wav; sourceTree = "<group>"; };
 		636DCBE22B2AFE6A0037CF26 /* explosion.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = explosion.wav; path = "../../../../Downloads/Project Source Code 2019-05-25/Assets/Project1/explosion.wav"; sourceTree = "<group>"; };
-		636DCBE42B2AFEDB0037CF26 /* jump.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = jump.wav; path = ../../../../Downloads/jump.wav; sourceTree = "<group>"; };
-		636DCBE62B2B00910037CF26 /* wind.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = wind.mp3; path = ../../../../Downloads/wind.mp3; sourceTree = "<group>"; };
-		636DCBE82B2B09890037CF26 /* icebreak.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = icebreak.mp3; path = ../../../../Downloads/icebreak.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,11 +81,7 @@
 				63693B872B2715B80056E7FA /* Main.storyboard */,
 				63693B8C2B2715B90056E7FA /* LaunchScreen.storyboard */,
 				63693B982B2844CD0056E7FA /* TestingStuff.swift */,
-				636DCBE02B2AFC2A0037CF26 /* bonus.wav */,
 				636DCBE22B2AFE6A0037CF26 /* explosion.wav */,
-				636DCBE42B2AFEDB0037CF26 /* jump.wav */,
-				636DCBE62B2B00910037CF26 /* wind.mp3 */,
-				636DCBE82B2B09890037CF26 /* icebreak.mp3 */,
 			);
 			path = PenguinRun;
 			sourceTree = "<group>";
@@ -158,16 +146,12 @@
 			files = (
 				636DCBE32B2AFE6A0037CF26 /* explosion.wav in Resources */,
 				63693B892B2715B80056E7FA /* Main.storyboard in Resources */,
-				636DCBE92B2B09890037CF26 /* icebreak.mp3 in Resources */,
 				63693B802B2715B80056E7FA /* GameScene.sks in Resources */,
-				636DCBE72B2B00910037CF26 /* wind.mp3 in Resources */,
 				63693B8E2B2715B90056E7FA /* LaunchScreen.storyboard in Resources */,
 				63693B952B271E650056E7FA /* SnowParticle.sks in Resources */,
 				63693B9F2B287C510056E7FA /* Assets.xcassets in Resources */,
 				63693B822B2715B80056E7FA /* Actions.sks in Resources */,
-				636DCBE12B2AFC2A0037CF26 /* bonus.wav in Resources */,
 				63693B9E2B287C510056E7FA /* Explosion.sks in Resources */,
-				636DCBE52B2AFEDB0037CF26 /* jump.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

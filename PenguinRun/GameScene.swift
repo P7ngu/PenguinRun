@@ -51,6 +51,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 playButtonIsActive = false
                 createExitButton()
                 exitButtonIsActive = true
+                let bonusTimer = Timer.scheduledTimer(timeInterval: 3.7, target: self, selector: #selector(createBonus), userInfo: nil, repeats: true)
                 gameTimer = Timer.scheduledTimer(timeInterval: 4.2, target: self, selector: #selector(createIceEnemy), userInfo: nil, repeats: true)
             } else { //I'm resetting it lol
                 
@@ -234,29 +235,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     @objc func createBonus(){
-        print("Bonus spawned in")
         let randomX = GKRandomDistribution(lowestValue: 120, highestValue: 180)
-        let sprite = SKSpriteNode(imageNamed: "fish")
-        sprite.position = CGPoint(x: randomX.nextInt(), y: 0)
-        sprite.name = "Bonus"
-        sprite.zPosition = 1
-        addChild(sprite)
-        sprite.physicsBody = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
-        sprite.physicsBody?.velocity = CGVector(dx: -500, dy: 0)
-        sprite.physicsBody?.linearDamping = 20
-        sprite.physicsBody?.affectedByGravity = false
-        sprite.physicsBody?.contactTestBitMask = 1 //1 indicates the player, only collide with the player
-        sprite.physicsBody?.categoryBitMask = 0 //so we can ignore their collision with one another.
-        sprite.physicsBody?.collisionBitMask = 0 //we get notified when the player touches the bonus, but they won't bounch on eachother
-        let moveTheFish = SKAction.moveBy(x: -300, y: 0, duration: 5)
-        let moveLoop = SKAction.sequence([moveTheFish])
-        let moveForever = SKAction.repeatForever(moveLoop)
-        sprite.run(moveForever)
+        let randomY = GKRandomDistribution(lowestValue: -5, highestValue: 15)
+        
+        if randomX.nextInt() % 2 == 0 {
+            
+            print("Bonus spawned in")
+            
+            let sprite = SKSpriteNode(imageNamed: "fish")
+            sprite.position = CGPoint(x: randomX.nextInt(), y: randomY.nextInt())
+            sprite.name = "Bonus"
+            sprite.zPosition = 1
+            addChild(sprite)
+            sprite.physicsBody = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
+            sprite.physicsBody?.velocity = CGVector(dx: -500, dy: 0)
+            sprite.physicsBody?.linearDamping = 3
+            sprite.physicsBody?.affectedByGravity = false
+            sprite.physicsBody?.contactTestBitMask = 1 //1 indicates the player, only collide with the player
+            sprite.physicsBody?.categoryBitMask = 0 //so we can ignore their collision with one another.
+            sprite.physicsBody?.collisionBitMask = 0 //we get notified when the player touches the bonus, but they won't bounch on eachother
+            let moveTheFish = SKAction.moveBy(x: -300, y: 0, duration: 5)
+            let moveLoop = SKAction.sequence([moveTheFish])
+            let moveForever = SKAction.repeatForever(moveLoop)
+            sprite.run(moveForever)
+        }
         
     }
     
     @objc func createIceEnemy(){
-        createBonus()
         incrementPlayerScore(points: 1)
         let randomX = GKRandomDistribution(lowestValue: 100, highestValue: 200)
         let spriteEnemy = SKSpriteNode(imageNamed: "enemy")
