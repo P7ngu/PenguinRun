@@ -401,7 +401,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func givePlayerImmortalityBonus(){
-        
+        player.physicsBody?.categoryBitMask = 0 //it doesn't hit the cubes, but neither the fishes
+        player.texture = SKTexture(imageNamed: "pingugold")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 15){
+            print("Bonus effect is over now")
+            self.player.physicsBody?.categoryBitMask = 1 //back to normal
+            self.player.texture = SKTexture(imageNamed: "player")
+        }
     }
     
     func incrementPlayerScore(points: Int){
