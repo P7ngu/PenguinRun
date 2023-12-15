@@ -26,8 +26,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private var lastUpdateTime : TimeInterval = 0
     
-    let scoreLabel = SKLabelNode()
-    let bestScoreLabel = SKLabelNode()
+    let scoreLabel = SKLabelNode(fontNamed: "AvenireNextCondensed-Bold")
+    let bestScoreLabel = SKLabelNode(fontNamed: "AvenireNextCondensed-Bold")
     var playButton = SKSpriteNode()
     var exitButton = SKSpriteNode()
     var playButtonIsActive = true
@@ -66,12 +66,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var score = 0 {
         didSet{
-            scoreLabel.text = "Score: \(score)"
+            scoreLabel.text = "SCORE: \(score)"
         }
     }
     
     func createBestScoreLabel(){
-        bestScoreLabel.text = "Best score: \(bestScore)"
+        bestScoreLabel.text = "HIGHEST: \(bestScore)"
         bestScoreLabel.zPosition = 5
         bestScoreLabel.fontColor = .black
         updateBestScore()
@@ -81,7 +81,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func updateBestScore() {
         bestScoreLabel.position.y = (camera?.position.y)! + 120
         bestScoreLabel.position.x = (camera?.position.x)! - 200
-        bestScoreLabel.text = "Best score: \(bestScore)"
+        bestScoreLabel.text = "HIGHEST: \(bestScore)"
         
     }
     
@@ -330,7 +330,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let sound = SKAction.playSoundFileNamed("jump.wav", waitForCompletion: false)
             run(sound)
             //player.texture = SKTexture(imageNamed: "player_jumping")
-            player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 300))
+            player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 500))
+            
         }
     }
     
