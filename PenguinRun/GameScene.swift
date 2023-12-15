@@ -243,11 +243,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if randomX % 2 == 0 { //normal fish point, effect = +5 points
             print("Normal Bonus spawned in")
             let sprite = SKSpriteNode(imageNamed: "fish")
+            sprite.size = CGSize(width: 80, height: 70)
             sprite.name = "Bonus"
             assignTheBonusAbility(sprite: sprite, randomX: randomX, randomY: randomY)
         } else if randomX % 3 == 0 && randomX % 5 == 0{ //golden fish, effect = immortality for some seconds
             print("Golden Bonus spawned in")
             let sprite = SKSpriteNode(imageNamed: "goldfish")
+            sprite.size = CGSize(width: 80, height: 70)
             sprite.name = "GoldBonus"
             assignTheBonusAbility(sprite: sprite, randomX: randomX, randomY: randomY)
         } /*else { //extra bonus
@@ -326,11 +328,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func jump() {
-        if player.position.y < -40 {
+        if player.position.y < -90 {
             let sound = SKAction.playSoundFileNamed("jump.wav", waitForCompletion: false)
             run(sound)
             //player.texture = SKTexture(imageNamed: "player_jumping")
-            player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 500))
+            player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 300))
             
         }
     }
