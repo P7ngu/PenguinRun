@@ -153,7 +153,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func createSnow() {
         if let particles = SKEmitterNode(fileNamed: "SnowParticle"){
-            particles.advanceSimulationTime(10)
+            particles.advanceSimulationTime(2)
             particles.position.x = 0
             particles.position.y = 200
             addChild(particles)
