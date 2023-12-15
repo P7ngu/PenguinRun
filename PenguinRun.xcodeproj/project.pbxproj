@@ -19,13 +19,12 @@
 		63693B992B2844CD0056E7FA /* TestingStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63693B982B2844CD0056E7FA /* TestingStuff.swift */; };
 		63693B9E2B287C510056E7FA /* Explosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = 63693B9C2B287C510056E7FA /* Explosion.sks */; };
 		63693B9F2B287C510056E7FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63693B9D2B287C510056E7FA /* Assets.xcassets */; };
-		636DCBE32B2AFE6A0037CF26 /* explosion.wav in Resources */ = {isa = PBXBuildFile; fileRef = 636DCBE22B2AFE6A0037CF26 /* explosion.wav */; };
 		636DCBEE2B2B22C70037CF26 /* wind.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 636DCBEA2B2B22C70037CF26 /* wind.mp3 */; };
 		636DCBEF2B2B22C70037CF26 /* bonus.wav in Resources */ = {isa = PBXBuildFile; fileRef = 636DCBEB2B2B22C70037CF26 /* bonus.wav */; };
 		636DCBF02B2B22C70037CF26 /* jump.wav in Resources */ = {isa = PBXBuildFile; fileRef = 636DCBEC2B2B22C70037CF26 /* jump.wav */; };
 		636DCBF12B2B22C70037CF26 /* icebreak.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 636DCBED2B2B22C70037CF26 /* icebreak.mp3 */; };
 		636DCBF32B2CC7B40037CF26 /* SF-Pro.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 636DCBF22B2CC7B40037CF26 /* SF-Pro.ttf */; };
-		636DCBF62B2CCA7D0037CF26 /* explosion.wav in Resources */ = {isa = PBXBuildFile; fileRef = 636DCBF52B2CCA7D0037CF26 /* explosion.wav */; };
+		636DCBF82B2CCAB60037CF26 /* explosion.wav in Resources */ = {isa = PBXBuildFile; fileRef = 636DCBF72B2CCAB60037CF26 /* explosion.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,14 +41,12 @@
 		63693B982B2844CD0056E7FA /* TestingStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingStuff.swift; sourceTree = "<group>"; };
 		63693B9C2B287C510056E7FA /* Explosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Explosion.sks; sourceTree = "<group>"; };
 		63693B9D2B287C510056E7FA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		636DCBE22B2AFE6A0037CF26 /* explosion.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = explosion.wav; path = "../../../../Downloads/Project Source Code 2019-05-25/Assets/Project1/explosion.wav"; sourceTree = "<group>"; };
 		636DCBEA2B2B22C70037CF26 /* wind.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = wind.mp3; path = PenguinRun/wind.mp3; sourceTree = "<group>"; };
 		636DCBEB2B2B22C70037CF26 /* bonus.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = bonus.wav; path = PenguinRun/bonus.wav; sourceTree = "<group>"; };
 		636DCBEC2B2B22C70037CF26 /* jump.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = jump.wav; path = PenguinRun/jump.wav; sourceTree = "<group>"; };
 		636DCBED2B2B22C70037CF26 /* icebreak.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = icebreak.mp3; path = PenguinRun/icebreak.mp3; sourceTree = "<group>"; };
 		636DCBF22B2CC7B40037CF26 /* SF-Pro.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-Pro.ttf"; path = "PenguinRun/SF-Pro.ttf"; sourceTree = "<group>"; };
-		636DCBF42B2CCA5F0037CF26 /* explosion.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = explosion.wav; sourceTree = "<group>"; };
-		636DCBF52B2CCA7D0037CF26 /* explosion.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = explosion.wav; sourceTree = "<group>"; };
+		636DCBF72B2CCAB60037CF26 /* explosion.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = explosion.wav; path = PenguinRun/explosion.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,8 +69,7 @@
 				636DCBEC2B2B22C70037CF26 /* jump.wav */,
 				636DCBEA2B2B22C70037CF26 /* wind.mp3 */,
 				636DCBF22B2CC7B40037CF26 /* SF-Pro.ttf */,
-				636DCBF42B2CCA5F0037CF26 /* explosion.wav */,
-				636DCBF52B2CCA7D0037CF26 /* explosion.wav */,
+				636DCBF72B2CCAB60037CF26 /* explosion.wav */,
 				63693B7B2B2715B80056E7FA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -101,7 +97,6 @@
 				63693B872B2715B80056E7FA /* Main.storyboard */,
 				63693B8C2B2715B90056E7FA /* LaunchScreen.storyboard */,
 				63693B982B2844CD0056E7FA /* TestingStuff.swift */,
-				636DCBE22B2AFE6A0037CF26 /* explosion.wav */,
 			);
 			path = PenguinRun;
 			sourceTree = "<group>";
@@ -165,14 +160,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				636DCBF02B2B22C70037CF26 /* jump.wav in Resources */,
-				636DCBE32B2AFE6A0037CF26 /* explosion.wav in Resources */,
-				636DCBF62B2CCA7D0037CF26 /* explosion.wav in Resources */,
 				636DCBF32B2CC7B40037CF26 /* SF-Pro.ttf in Resources */,
 				63693B892B2715B80056E7FA /* Main.storyboard in Resources */,
 				636DCBEE2B2B22C70037CF26 /* wind.mp3 in Resources */,
 				63693B802B2715B80056E7FA /* GameScene.sks in Resources */,
 				636DCBEF2B2B22C70037CF26 /* bonus.wav in Resources */,
 				63693B8E2B2715B90056E7FA /* LaunchScreen.storyboard in Resources */,
+				636DCBF82B2CCAB60037CF26 /* explosion.wav in Resources */,
 				63693B952B271E650056E7FA /* SnowParticle.sks in Resources */,
 				636DCBF12B2B22C70037CF26 /* icebreak.mp3 in Resources */,
 				63693B9F2B287C510056E7FA /* Assets.xcassets in Resources */,
