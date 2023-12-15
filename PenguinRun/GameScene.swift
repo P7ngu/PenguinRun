@@ -53,7 +53,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 playButtonIsActive = false
                 createExitButton()
                 exitButtonIsActive = true
-                let bonusTimer = Timer.scheduledTimer(timeInterval: 3.7, target: self, selector: #selector(createBonus), userInfo: nil, repeats: true)
+                _ = Timer.scheduledTimer(timeInterval: 3.7, target: self, selector: #selector(createBonus), userInfo: nil, repeats: true)
                 gameTimer = Timer.scheduledTimer(timeInterval: 2.8, target: self, selector: #selector(createIceEnemy), userInfo: nil, repeats: true)
             } else { //I'm resetting it lol
                 
@@ -448,8 +448,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             node.removeFromParent()
             return
         }
-        
-        if(!isPlayerImmortal){
         let sound = SKAction.playSoundFileNamed("explosion.wav", waitForCompletion: false)
         run(sound)
         
@@ -460,11 +458,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             particles.zPosition = 3
             addChild(particles)
         }
-        
+        if(!isPlayerImmortal){
             player.removeFromParent()
+            node.removeFromParent()
             makeTheGameEnd()
-        } else { //the player is immortal
             
+        } else { //the player is immortal
+            node.removeFromParent()
         }
         
     }
