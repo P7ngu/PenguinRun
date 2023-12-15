@@ -21,6 +21,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var deltaTime: TimeInterval = 0
     var entities = [GKEntity]()
     var graphs = [String : GKGraph]()
+    var pointsMultiplier = 1
+    var isPlayerImmortal = false
     
     private var lastUpdateTime : TimeInterval = 0
     
@@ -401,10 +403,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func givePlayerImmortalityBonus(){
+        isPlayerImmortal.toggle()
         player.physicsBody?.categoryBitMask = 0 //it doesn't hit the cubes, but neither the fishes
         player.texture = SKTexture(imageNamed: "pingugold")
+        pointsMultiplier = 10
+        DispatchQueue.main.asyncAfter(deadline: .now() + 12){
+            self.pointsMultiplier = 3
+            self.player.texture = SKTexture(imageNamed: "pingugold2") //fading the gold effect
+        }
         DispatchQueue.main.asyncAfter(deadline: .now() + 15){
             print("Bonus effect is over now")
+            self.isPlayerImmortal.toggle()
+            self.pointsMultiplier = 1
             self.player.physicsBody?.categoryBitMask = 1 //back to normal
             self.player.texture = SKTexture(imageNamed: "player")
         }
@@ -413,7 +423,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func incrementPlayerScore(points: Int){
         if player.parent != nil{
             //he's not dead
-            score += points
+            score += points * pointsMultiplier
         }
     }
     
