@@ -333,7 +333,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
-        cam.position = player.position
+        cam.position.x = player.position.x
+        cam.position.y = player.position.y + 35
         updateExitButtonPosition()
         updateScoreLabelPosition()
         updateBestScore()
