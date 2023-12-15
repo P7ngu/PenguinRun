@@ -239,7 +239,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     @objc func createBonus(){
         let randomX = GKRandomDistribution(lowestValue: 120, highestValue: 180).nextInt()
-        let randomY = GKRandomDistribution(lowestValue: -5, highestValue: 15).nextInt()
+        let randomY = GKRandomDistribution(lowestValue: -15, highestValue: 15).nextInt()
         if randomX % 2 == 0 { //normal fish point, effect = +5 points
             print("Normal Bonus spawned in")
             let sprite = SKSpriteNode(imageNamed: "fish")
@@ -333,10 +333,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let sound = SKAction.playSoundFileNamed("jump.wav", waitForCompletion: false)
             run(sound)
             //player.texture = SKTexture(imageNamed: "player_jumping")
-            //if(player.physicsBody?.velocity.dy <= 10){
                 player.physicsBody?.velocity = CGVectorMake(0,0)
                 player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 300))
-           // }
         }
     }
     
@@ -473,7 +471,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func makeTheGameEnd () {
         let gameOver = SKSpriteNode(imageNamed: "gameover")
         gameOver.zPosition = 10
-        gameOver.position = CGPoint(x: -230, y: -100)
+        gameOver.position.x = player.position.x
+        gameOver.position.y = player.position.y
         gameOver.alpha = 0
         let sound = SKAction.playSoundFileNamed("icebreak", waitForCompletion: false)
         run(sound)
