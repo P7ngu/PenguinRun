@@ -55,7 +55,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 gameTimer = Timer.scheduledTimer(timeInterval: 4.2, target: self, selector: #selector(createIceEnemy), userInfo: nil, repeats: true)
             } else { //I'm resetting it lol
                 
-               exitButtonIsActive = false
+                exitButtonIsActive = false
             }
         }
     }
@@ -105,7 +105,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
-
+    
     override func didMove(to view: SKView) {
         self.view?.ignoresSiblingOrder = false
         groundTimer = Timer.scheduledTimer(timeInterval: 40, target: self, selector: #selector(createGround), userInfo: nil, repeats: true)
@@ -129,17 +129,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-   
+    
     
     func createBG(){
         let background = SKSpriteNode(imageNamed: "background")
         background.zPosition = -10
-        //background.position.y = -200
+        background.position.y = 70
         addChild(background)
     }
     
     func createPlayer() {
-        player.position.x = -250
+        player.position.x = -265
         //player.position.y = -200
         player.zPosition = 1
         player.name = "Player"
@@ -235,30 +235,43 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     @objc func createBonus(){
-        let randomX = GKRandomDistribution(lowestValue: 120, highestValue: 180)
-        let randomY = GKRandomDistribution(lowestValue: -5, highestValue: 15)
-        
-        if randomX.nextInt() % 2 == 0 {
-            
-            print("Bonus spawned in")
-            
+        let randomX = GKRandomDistribution(lowestValue: 120, highestValue: 180).nextInt()
+        let randomY = GKRandomDistribution(lowestValue: -5, highestValue: 15).nextInt()
+        if randomX % 2 == 0 { //normal fish point, effect = +5 points
+            print("Normal Bonus spawned in")
             let sprite = SKSpriteNode(imageNamed: "fish")
-            sprite.position = CGPoint(x: randomX.nextInt(), y: randomY.nextInt())
             sprite.name = "Bonus"
-            sprite.zPosition = 1
-            addChild(sprite)
-            sprite.physicsBody = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
-            sprite.physicsBody?.velocity = CGVector(dx: -500, dy: 0)
-            sprite.physicsBody?.linearDamping = 3
-            sprite.physicsBody?.affectedByGravity = false
-            sprite.physicsBody?.contactTestBitMask = 1 //1 indicates the player, only collide with the player
-            sprite.physicsBody?.categoryBitMask = 0 //so we can ignore their collision with one another.
-            sprite.physicsBody?.collisionBitMask = 0 //we get notified when the player touches the bonus, but they won't bounch on eachother
-            let moveTheFish = SKAction.moveBy(x: -300, y: 0, duration: 5)
-            let moveLoop = SKAction.sequence([moveTheFish])
-            let moveForever = SKAction.repeatForever(moveLoop)
-            sprite.run(moveForever)
-        }
+            assignTheBonusAbility(sprite: sprite, randomX: randomX, randomY: randomY)
+        } else { //golden fish, effect = immortality for some seconds
+            print("Golden Bonus spawned in")
+            let sprite = SKSpriteNode(imageNamed: "goldfish")
+            sprite.name = "GoldBonus"
+            assignTheBonusAbility(sprite: sprite, randomX: randomX, randomY: randomY)
+        } /*else { //extra bonus
+            print("Extra Bonus spawned in")
+            let sprite = SKSpriteNode(imageNamed: "extrafish")
+            sprite.name = "ExtraBonus"
+            assignTheBonusAbility(sprite: sprite, randomX: randomX, randomY: randomY)
+        }*/
+        
+    }
+    
+    func assignTheBonusAbility (sprite: SKSpriteNode, randomX: Int, randomY: Int) {
+        //This is the same in every case
+        sprite.position = CGPoint(x: randomX, y: randomY)
+        sprite.zPosition = 1
+        addChild(sprite)
+        sprite.physicsBody = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
+        sprite.physicsBody?.velocity = CGVector(dx: -500, dy: 0)
+        sprite.physicsBody?.linearDamping = 3
+        sprite.physicsBody?.affectedByGravity = false
+        sprite.physicsBody?.contactTestBitMask = 1 //1 indicates the player, only collide with the player
+        sprite.physicsBody?.categoryBitMask = 0 //so we can ignore their collision with one another.
+        sprite.physicsBody?.collisionBitMask = 0 //we get notified when the player touches the bonus, but they won't bounch on eachother
+        let moveTheFish = SKAction.moveBy(x: -300, y: 0, duration: 5)
+        let moveLoop = SKAction.sequence([moveTheFish])
+        let moveForever = SKAction.repeatForever(moveLoop)
+        sprite.run(moveForever)
         
     }
     
@@ -272,7 +285,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         spriteEnemy.physicsBody?.velocity = CGVector(dx: -500, dy: 0)
         spriteEnemy.physicsBody?.linearDamping = 0
         spriteEnemy.physicsBody?.affectedByGravity = false
-        spriteEnemy.physicsBody?.contactTestBitMask = 1 
+        spriteEnemy.physicsBody?.contactTestBitMask = 1
         //| 2 //1 indicates the player, only collide with the player, 2 for the ground
         spriteEnemy.physicsBody?.categoryBitMask = 0 //so we can ignore their collision with one another.
         spriteEnemy.position = CGPoint(x: randomX.nextInt(), y: -199)
@@ -358,21 +371,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func didBegin(_ contact: SKPhysicsContact) {
         
-            guard let nodeA = contact.bodyA.node else { return }
-            guard let nodeB = contact.bodyB.node else { return }
-            if nodeA.name == "Player"{
-                playerHit(nodeB)
-                print("hit")
-            } else if nodeB.name == "Player"{
-                playerHit(nodeA)
-                print("hit")
-            } else if nodeA.name == "Enemy"{
-                //cubeHit(nodeA)
-                print("hit cube")
-            } else if nodeB.name == "Enemy"{
-                //cubeHit(nodeB)
-                print("hit cube")
-            }
+        guard let nodeA = contact.bodyA.node else { return }
+        guard let nodeB = contact.bodyB.node else { return }
+        if nodeA.name == "Player"{
+            playerHit(nodeB)
+            print("hit")
+        } else if nodeB.name == "Player"{
+            playerHit(nodeA)
+            print("hit")
+        } else if nodeA.name == "Enemy"{
+            //cubeHit(nodeA)
+            print("hit cube")
+        } else if nodeB.name == "Enemy"{
+            //cubeHit(nodeB)
+            print("hit cube")
+        }
         
     }
     
@@ -382,9 +395,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             particles.position.x = node.position.x
             particles.position.y = node.position.y
             particles.zPosition = 3
-           // addChild(particles)
+            // addChild(particles)
         }
         //node.removeFromParent()
+    }
+    
+    func givePlayerImmortalityBonus(){
+        
     }
     
     func incrementPlayerScore(points: Int){
@@ -398,7 +415,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if node.name == "Bonus"{
             let sound = SKAction.playSoundFileNamed("bonus.wav", waitForCompletion: false)
             run(sound)
-           incrementPlayerScore(points: 5)
+            incrementPlayerScore(points: 5)
+            node.removeFromParent()
+            return
+        }
+        if node.name == "GoldBonus"{
+            let sound = SKAction.playSoundFileNamed("bonus.wav", waitForCompletion: false)
+            run(sound)
+            givePlayerImmortalityBonus()
             node.removeFromParent()
             return
         }
@@ -414,7 +438,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         player.removeFromParent()
         makeTheGameEnd()
-     
+        
     }
     
     func makeTheGameEnd () {
