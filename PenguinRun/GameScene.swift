@@ -281,7 +281,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     @objc func createIceEnemy(){
-        print(scoreLabel.fontName)
         incrementPlayerScore(points: 1)
         let randomX = GKRandomDistribution(lowestValue: 100, highestValue: 200)
         let spriteEnemy = SKSpriteNode(imageNamed: "enemy")
