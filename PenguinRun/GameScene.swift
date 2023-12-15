@@ -26,8 +26,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private var lastUpdateTime : TimeInterval = 0
     
-    let scoreLabel = SKLabelNode(fontNamed: "ComicSans")
-    let bestScoreLabel = SKLabelNode(fontNamed: "AvenireNextCondensed-Bold")
+    let scoreLabel = SKLabelNode(fontNamed: "HelveticaNeue")
+    let bestScoreLabel = SKLabelNode(fontNamed: "HelveticaNeue")
     var playButton = SKSpriteNode()
     var exitButton = SKSpriteNode()
     var playButtonIsActive = true
@@ -281,6 +281,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     @objc func createIceEnemy(){
+        print(scoreLabel.fontName)
         incrementPlayerScore(points: 1)
         let randomX = GKRandomDistribution(lowestValue: 100, highestValue: 200)
         let spriteEnemy = SKSpriteNode(imageNamed: "enemy")
