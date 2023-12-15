@@ -26,7 +26,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private var lastUpdateTime : TimeInterval = 0
     
-    let scoreLabel = SKLabelNode(fontNamed: "AvenireNextCondensed-Bold")
+    let scoreLabel = SKLabelNode(fontNamed: "ComicSans")
     let bestScoreLabel = SKLabelNode(fontNamed: "AvenireNextCondensed-Bold")
     var playButton = SKSpriteNode()
     var exitButton = SKSpriteNode()
@@ -146,7 +146,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.zPosition = 1
         player.name = "Player"
         addChild(player)
-        let playerBody = CGSize(width: player.size.width - 20, height: player.size.height - 15)
+        let playerBody = CGSize(width: player.size.width - 30, height: player.size.height - 20)
         player.physicsBody = SKPhysicsBody(rectangleOf: playerBody)
         player.physicsBody?.categoryBitMask = 1
     }
@@ -285,7 +285,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let randomX = GKRandomDistribution(lowestValue: 100, highestValue: 200)
         let spriteEnemy = SKSpriteNode(imageNamed: "enemy")
         spriteEnemy.name = "Enemy"
-        let icecubeSize = CGSize(width: spriteEnemy.size.width - 60, height: spriteEnemy.size.height - 40)
+        let icecubeSize = CGSize(width: spriteEnemy.size.width - 80, height: spriteEnemy.size.height - 60)
         spriteEnemy.physicsBody = SKPhysicsBody(rectangleOf: icecubeSize)
         spriteEnemy.physicsBody?.velocity = CGVector(dx: -500, dy: 0)
         spriteEnemy.physicsBody?.linearDamping = 0
@@ -304,7 +304,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
+        for t in touches { self.touchDown(atPoint: t.location(in: self))
+            break }
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
         let tappedNodes = nodes(at: location)
@@ -332,8 +333,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let sound = SKAction.playSoundFileNamed("jump.wav", waitForCompletion: false)
             run(sound)
             //player.texture = SKTexture(imageNamed: "player_jumping")
-            player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 300))
-            
+            //if(player.physicsBody?.velocity.dy <= 10){
+                player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 300))
+           // }
         }
     }
     
@@ -408,7 +410,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func givePlayerImmortalityBonus(){
         isPlayerImmortal.toggle()
-        player.physicsBody?.categoryBitMask = 0 //it doesn't hit the cubes, but neither the fishes
+        player.physicsBody?.categoryBitMask = 1 //it doesn't hit the cubes, but neither the fishes
         player.texture = SKTexture(imageNamed: "pingugold")
         pointsMultiplier = 10
         DispatchQueue.main.asyncAfter(deadline: .now() + 12){
@@ -446,6 +448,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             node.removeFromParent()
             return
         }
+        
+        if(!isPlayerImmortal){
         let sound = SKAction.playSoundFileNamed("explosion.wav", waitForCompletion: false)
         run(sound)
         
@@ -456,8 +460,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             particles.zPosition = 3
             addChild(particles)
         }
-        player.removeFromParent()
-        makeTheGameEnd()
+        
+            player.removeFromParent()
+            makeTheGameEnd()
+        } else { //the player is immortal
+            
+        }
         
     }
     
