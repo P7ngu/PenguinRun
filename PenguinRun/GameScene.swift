@@ -334,6 +334,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             run(sound)
             //player.texture = SKTexture(imageNamed: "player_jumping")
             //if(player.physicsBody?.velocity.dy <= 10){
+                player.physicsBody?.velocity = CGVectorMake(0,0)
                 player.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 300))
            // }
         }
