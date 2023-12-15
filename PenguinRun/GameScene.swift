@@ -54,7 +54,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 createExitButton()
                 exitButtonIsActive = true
                 let bonusTimer = Timer.scheduledTimer(timeInterval: 3.7, target: self, selector: #selector(createBonus), userInfo: nil, repeats: true)
-                gameTimer = Timer.scheduledTimer(timeInterval: 4.2, target: self, selector: #selector(createIceEnemy), userInfo: nil, repeats: true)
+                gameTimer = Timer.scheduledTimer(timeInterval: 2.8, target: self, selector: #selector(createIceEnemy), userInfo: nil, repeats: true)
             } else { //I'm resetting it lol
                 
                 exitButtonIsActive = false
@@ -244,7 +244,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let sprite = SKSpriteNode(imageNamed: "fish")
             sprite.name = "Bonus"
             assignTheBonusAbility(sprite: sprite, randomX: randomX, randomY: randomY)
-        } else { //golden fish, effect = immortality for some seconds
+        } else if randomX % 3 == 0 && randomX % 5 == 0{ //golden fish, effect = immortality for some seconds
             print("Golden Bonus spawned in")
             let sprite = SKSpriteNode(imageNamed: "goldfish")
             sprite.name = "GoldBonus"
