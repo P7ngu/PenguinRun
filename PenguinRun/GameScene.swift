@@ -112,6 +112,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bestScoreLabel.text = "HIGHEST: \(bestScore)"
         bestScoreLabel.zPosition = 5
         bestScoreLabel.fontColor = .black
+        //bestScoreLabel.fontColor = UIColor(named: "ThatYellow")
         updateBestScoreLabel()
         addChild(bestScoreLabel)
     }
