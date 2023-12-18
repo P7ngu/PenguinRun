@@ -175,7 +175,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func createScore(){
-        checkFonts()
+        //checkFonts()
         scoreLabel.zPosition = 3
         scoreLabel.fontColor = .black
         updateScoreLabelPosition()
