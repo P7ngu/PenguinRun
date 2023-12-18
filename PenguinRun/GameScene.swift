@@ -154,6 +154,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         groundDeleteTimer = Timer.scheduledTimer(timeInterval: 1.8, target: self, selector: #selector(deleteUnusedGrounds), userInfo: nil, repeats: true)
         
+        //buildLogo()
     
         animateLogo()
         
@@ -363,6 +364,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    func buildLogo() {
+        let staticLogo = SKSpriteNode(imageNamed: "staticlogo")
+        staticLogo.texture = SKTexture(imageNamed: "staticlogo")
+        staticLogo.position = CGPoint(x: frame.midX - 250, y: -20)
+        staticLogo.zPosition = 120
+        staticLogo.setScale(0.20)
+        addChild(staticLogo)
+    }
     
     func buildLogo(_ name:String) -> [SKTexture]{
         let textureAtlas = SKTextureAtlas(named: name)
