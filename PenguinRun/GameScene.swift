@@ -119,7 +119,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func updateBestScoreLabel() {
         bestScoreLabel.position.y = (camera?.position.y)! + 120
-        bestScoreLabel.position.x = (camera?.position.x)! - 200
+        bestScoreLabel.position.x = (camera?.position.x)! - 230
         bestScoreLabel.text = "HIGHEST: \(bestScore)"
         
     }
