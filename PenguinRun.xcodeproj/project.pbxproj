@@ -88,8 +88,8 @@
 				63693B7D2B2715B80056E7FA /* AppDelegate.swift */,
 				63693B7F2B2715B80056E7FA /* GameScene.sks */,
 				63693B812B2715B80056E7FA /* Actions.sks */,
-				63693B832B2715B80056E7FA /* GameScene.swift */,
 				63693B9C2B287C510056E7FA /* Explosion.sks */,
+				63693B832B2715B80056E7FA /* GameScene.swift */,
 				63693B9D2B287C510056E7FA /* Assets.xcassets */,
 				63693B962B2840330056E7FA /* Extension.swift */,
 				63693B942B271E650056E7FA /* SnowParticle.sks */,
@@ -128,6 +128,9 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
+				KnownAssetTags = (
+					New,
+				);
 				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {

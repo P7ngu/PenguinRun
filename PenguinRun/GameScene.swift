@@ -12,11 +12,14 @@ import SwiftUI
 class GameScene: SKScene, SKPhysicsContactDelegate {
     @AppStorage("bestscore", store: UserDefaults(suiteName: "group.matteo.perotta.penguin-run")) var bestScore = 0 {
         didSet{
-            updateBestScore()
+            updateBestScoreLabel()
         }
     }
     
     let cam = SKCameraNode()
+    
+    private var logo = SKSpriteNode()
+    private var logoWalkingFrames: [SKTexture] = []
     
     var deltaTime: TimeInterval = 0
     var entities = [GKEntity]()
@@ -26,10 +29,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private var lastUpdateTime : TimeInterval = 0
     
-    let scoreLabel = SKLabelNode(fontNamed: "HelveticaNeue")
-    let bestScoreLabel = SKLabelNode(fontNamed: "HelveticaNeue")
+    let scoreLabel = SKLabelNode(fontNamed: "Futura-CondensedMedium")
+    let bestScoreLabel = SKLabelNode(fontNamed: "Futura-CondensedMedium")
+                                        //"ChalkboardSE-Regular")
+    
     var playButton = SKSpriteNode()
     var exitButton = SKSpriteNode()
+    var musicButton = SKSpriteNode()
+    
+    var musicButtonIsActive = true {
+        didSet{
+            if musicButtonIsActive{ //it's becoming inactive
+                musicButton.zPosition = -100
+
+            } else {
+                musicButton.zPosition = 100
+         
+            }
+        }
+    }
+    
     var playButtonIsActive = true
     var exitButtonIsActive = true
     
@@ -38,6 +57,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var groundDeleteTimer: Timer?
     var gameOver = false
     
+    var musicActive = true {
+        didSet{
+            if(musicActive){ //Just reactivated
+                musicButton.texture = SKTexture(imageNamed: "volumeon")
+                createMusic()
+            } else {
+                musicButton.texture = SKTexture(imageNamed: "volumeoff")
+                removeMusic()
+            }
+        }
+    }
+    
     var touchedExitButton = false {
         didSet{
             if(exitButtonIsActive){
@@ -45,10 +76,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
+    
+    
     var touchedPlayButton = false {
         didSet{
             //start the game
             if touchedPlayButton { //the user is starting the game
+                musicButtonIsActive.toggle()
+                musicButton.zPosition = -100
                 playButton.zPosition = -100
                 playButtonIsActive = false
                 createExitButton()
@@ -56,13 +91,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 _ = Timer.scheduledTimer(timeInterval: 3.7, target: self, selector: #selector(createBonus), userInfo: nil, repeats: true)
                 gameTimer = Timer.scheduledTimer(timeInterval: 2.8, target: self, selector: #selector(createIceEnemy), userInfo: nil, repeats: true)
             } else { //I'm resetting it lol
-                
+                musicButton.zPosition = 100
                 exitButtonIsActive = false
             }
         }
     }
     
+    
     var player: SKSpriteNode = SKSpriteNode(imageNamed: "player")
+    
     
     var score = 0 {
         didSet{
@@ -70,15 +107,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    
     func createBestScoreLabel(){
         bestScoreLabel.text = "HIGHEST: \(bestScore)"
         bestScoreLabel.zPosition = 5
         bestScoreLabel.fontColor = .black
-        updateBestScore()
+        updateBestScoreLabel()
         addChild(bestScoreLabel)
     }
     
-    func updateBestScore() {
+    func updateBestScoreLabel() {
         bestScoreLabel.position.y = (camera?.position.y)! + 120
         bestScoreLabel.position.x = (camera?.position.x)! - 200
         bestScoreLabel.text = "HIGHEST: \(bestScore)"
@@ -110,9 +148,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         self.view?.ignoresSiblingOrder = false
+        
         groundTimer = Timer.scheduledTimer(timeInterval: 40, target: self, selector: #selector(createGround), userInfo: nil, repeats: true)
         
         groundDeleteTimer = Timer.scheduledTimer(timeInterval: 1.8, target: self, selector: #selector(deleteUnusedGrounds), userInfo: nil, repeats: true)
+        
+    
+        animateLogo()
         
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
     }
@@ -122,7 +164,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.position.x = (camera?.position.x)! + 250
     }
     
+    func checkFonts(){
+        for name in UIFont.familyNames {
+            print(name)
+            if let nameString = name as? String {
+                print(UIFont.fontNames(forFamilyName: nameString))
+            }
+        }
+    }
+    
     func createScore(){
+        checkFonts()
         scoreLabel.zPosition = 3
         scoreLabel.fontColor = .black
         updateScoreLabelPosition()
@@ -171,6 +223,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(exitButton)
     }
     
+    func createMusicButton(){
+        if(musicActive){
+            musicButton = SKSpriteNode(imageNamed: "volumeon")
+        } else {
+            musicButton = SKSpriteNode(imageNamed: "volumeoff")
+        }
+        musicButton.zPosition = 100
+        updateMusicButtonPosition()
+        addChild(musicButton)
+    }
+    
+    func updateMusicButtonPosition(){
+        musicButton.position = CGPoint(x: (camera?.position.x)! - 290, y: (camera?.position.y)! - 130)
+    }
+    
     func createMenu(){
         if gameOver{
             //restart menu
@@ -184,11 +251,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    override func sceneDidLoad() {
+    func createMusic(){
         let music = SKAudioNode(fileNamed: "wind.mp3")
+        music.name = "Music"
         addChild(music)
-        createMenu()
+    }
+    
+    func removeMusic(){
+        for node in children {
+            if node.name == "Music" {
+                node.removeFromParent()
+            }
+        }
+    }
+    
+    override func sceneDidLoad() {
         self.camera = cam
+        
+        createMusic()
+        createMusicButton()
+        createMenu()
         createScore()
         createBG()
         createGround()
@@ -241,13 +323,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let randomX = GKRandomDistribution(lowestValue: 120, highestValue: 180).nextInt()
         let randomY = GKRandomDistribution(lowestValue: -15, highestValue: 15).nextInt()
         if randomX % 2 == 0 { //normal fish point, effect = +5 points
-            print("Normal Bonus spawned in")
+           // print("Normal Bonus spawned in")
             let sprite = SKSpriteNode(imageNamed: "fish")
             sprite.size = CGSize(width: 80, height: 70)
             sprite.name = "Bonus"
             assignTheBonusAbility(sprite: sprite, randomX: randomX, randomY: randomY)
         } else if randomX % 3 == 0 && randomX % 5 == 0{ //golden fish, effect = immortality for some seconds
-            print("Golden Bonus spawned in")
+            //print("Golden Bonus spawned in")
             let sprite = SKSpriteNode(imageNamed: "goldfish")
             sprite.size = CGSize(width: 80, height: 70)
             sprite.name = "GoldBonus"
@@ -280,6 +362,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    
+    func buildLogo(_ name:String) -> [SKTexture]{
+        let textureAtlas = SKTextureAtlas(named: name)
+        var frames = [SKTexture]()
+        for i in 1...textureAtlas.textureNames.count - 1{
+            frames.append(textureAtlas.textureNamed(textureAtlas.textureNames[i]))
+        }
+        let firstFrameTexture = frames[0]
+        logo = SKSpriteNode(texture: firstFrameTexture)
+        logo.position = CGPoint(x: -250, y: frame.midY - 50)
+        logo.setScale(0.20)
+        addChild(logo)
+        return frames
+    }
+    
+    func animateLogo() {
+        let frames:[SKTexture] = buildLogo("Sprites")
+
+        logo.run(SKAction.repeatForever(SKAction.animate(with: frames,
+                                                         timePerFrame: TimeInterval(0.78),
+                                                            resize: false, restore: true)))
+
+    }
+    
+    
+    
     @objc func createIceEnemy(){
         incrementPlayerScore(points: 1)
         let randomX = GKRandomDistribution(lowestValue: 100, highestValue: 200)
@@ -292,7 +400,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         spriteEnemy.physicsBody?.affectedByGravity = false
         spriteEnemy.physicsBody?.contactTestBitMask = 1
         //| 2 //1 indicates the player, only collide with the player, 2 for the ground
-        spriteEnemy.physicsBody?.categoryBitMask = 0 //so we can ignore their collision with one another.
+        spriteEnemy.physicsBody?.categoryBitMask = 0 | 2 //so we can ignore their collision with one another.
         spriteEnemy.position = CGPoint(x: randomX.nextInt(), y: -199)
         spriteEnemy.zPosition = 20
         addChild(spriteEnemy)
@@ -304,11 +412,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchDown(atPoint: t.location(in: self))
-            break }
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
         let tappedNodes = nodes(at: location)
+        
+        for t in touches {
+            if !tappedNodes.contains(musicButton) {
+                self.touchDown(atPoint: t.location(in: self))
+            }
+            break
+        }
+      
+    
+        if tappedNodes.contains(musicButton) && musicButtonIsActive{
+            if(musicActive){
+                removeMusic()
+            } else {
+                createMusic()
+            }
+            musicActive.toggle()
+            
+        }
         
         if tappedNodes.contains(playButton){
             //I'm touching the play button, but is it active?
@@ -355,9 +479,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Called before each frame is rendered
         cam.position.x = player.position.x
         cam.position.y = player.position.y + 35
+        updateMusicButtonPosition()
         updateExitButtonPosition()
         updateScoreLabelPosition()
-        updateBestScore()
+        updateBestScoreLabel()
         
         // Initialize _lastUpdateTime if it has not already been
         if (self.lastUpdateTime == 0) {
