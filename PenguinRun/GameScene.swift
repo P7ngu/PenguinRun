@@ -25,7 +25,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var entities = [GKEntity]()
     var graphs = [String : GKGraph]()
     var pointsMultiplier = 1
-    var isPlayerImmortal = false
+    var isPlayerImmortal = true
     
     private var lastUpdateTime : TimeInterval = 0
     
