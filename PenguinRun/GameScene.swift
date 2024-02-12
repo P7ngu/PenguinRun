@@ -393,7 +393,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         logo.run(SKAction.repeatForever(SKAction.animate(with: frames,
                                                          timePerFrame: TimeInterval(0.78),
                                                             resize: false, restore: true)))
-
     }
     
     
@@ -432,8 +431,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             break
         }
-      
-    
         if tappedNodes.contains(musicButton) && musicButtonIsActive{
             if(musicActive){
                 removeMusic()
