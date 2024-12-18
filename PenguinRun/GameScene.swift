@@ -9,7 +9,7 @@ import SpriteKit
 import GameplayKit
 import SwiftUI
 
-class GameScene: SKScene, SKPhysicsContactDelegate {
+class GameScene: SKScene, @preconcurrency SKPhysicsContactDelegate {
     @AppStorage("bestscore", store: UserDefaults(suiteName: "group.matteo.perotta.penguin-run")) var bestScore = 0 {
         didSet{
             updateBestScoreLabel()
@@ -508,6 +508,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    @MainActor
     func didBegin(_ contact: SKPhysicsContact) {
         
         guard let nodeA = contact.bodyA.node else { return }
